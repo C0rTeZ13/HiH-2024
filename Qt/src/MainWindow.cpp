@@ -6,6 +6,11 @@ CMainWindow::CMainWindow(QWidget *parent)
     , ui(new Ui::CMainWindow)
 {
     ui->setupUi(this);
+
+    //setWindowFlags(Qt::FramelessWindowHint| Qt::WindowSystemMenuHint);
+    // to fix taskbar minimize feature
+    //setWindowFlags(windowFlags() | Qt::WindowMinimizeButtonHint);
+
 }
 
 CMainWindow::~CMainWindow()
