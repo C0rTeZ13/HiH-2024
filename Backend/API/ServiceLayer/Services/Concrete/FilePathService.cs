@@ -1,10 +1,19 @@
-﻿namespace ServiceLayer.Services.Concrete
+﻿using Microsoft.Extensions.Configuration;
+
+namespace ServiceLayer.Services.Concrete
 {
     public class FilePathService : IFilePathService
     {
-        private const string _originFilesDir = @"C:/Files/Origin";
-        private const string _outFilesDir = @"C:/Files/Out";
+        private readonly string _originFilesDir;
+        private readonly string _outFilesDir;
         private const string _dateFormat = "dd.MM.yyyy.hh.mm.ss";
+
+        public FilePathService(IConfiguration configuration)
+        {
+            _originFilesDir = configuration["FilesStorage:Origin"];
+            _outFilesDir = configuration["FilesStorage:Out"];
+        }
+
         public string CreateOriginFilePath(string fileName)
         {
             return Path.Combine(_originFilesDir, DateTime.Now.ToString(_dateFormat) + fileName);
