@@ -15,6 +15,9 @@ public:
     CMainWindow(QWidget *parent = nullptr);
     ~CMainWindow();
 
+private slots:
+    void on_btn_calc_clicked();
+
 private:
     Ui::CMainWindow *ui;
 };
