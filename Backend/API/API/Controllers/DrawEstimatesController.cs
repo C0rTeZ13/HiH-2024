@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServiceLayer.Models;
 using ServiceLayer.Services;
+using ServiceLayer.Services.Authentication;
 
 namespace API.Controllers
 {
@@ -11,15 +12,19 @@ namespace API.Controllers
     [Authorize]
     public class DrawEstimatesController : ControllerBase
     {
-        private readonly ICreateEstimatesService _estimatesService;
+        private readonly ICreateEstimatesService _estimatesCreateService;
         private readonly IFileService _fileService;
         private readonly IFilePathService _pathService;
+        private readonly IEstimatesStorageService _estimatesStorageService;
+        private readonly IUserClaimsService _userClaimsService;
 
-        public DrawEstimatesController(ICreateEstimatesService estimatesService, IFileService fileService, IFilePathService pathService)
+        public DrawEstimatesController(ICreateEstimatesService estimatesCreateService, IFileService fileService, IFilePathService pathService, IEstimatesStorageService estimatesStorageService, IUserClaimsService userClaimsService)
         {
-            _estimatesService = estimatesService;
+            _estimatesCreateService = estimatesCreateService;
             _fileService = fileService;
             _pathService = pathService;
+            _estimatesStorageService = estimatesStorageService;
+            _userClaimsService = userClaimsService;
         }
 
         [Produces<DrawEstimatesResponse>]
@@ -45,11 +50,15 @@ namespace API.Controllers
             };
 
             string outImageFilePath = _pathService.CreateOutFilePath(request.ImageFile.FileName);
-            DrawEstimatesOutDto outDto = _estimatesService.GetDrawEstimates(inDto, outImageFilePath);
+            DrawEstimatesOutDto outDto = _estimatesCreateService.GetDrawEstimates(inDto, outImageFilePath);
+
+            string userId = _userClaimsService.GetUserId(User);
+            _estimatesStorageService.SaveEstimates(inDto, outDto, userId);
+
             string outFile = _fileService.GetFileAtPath(outImageFilePath);
             return new DrawEstimatesResponse()
             {
-                DetailsEstimates = outDto.DetailsEstimates,
+                DetailsEstimates = outDto.DetailInfos,
                 ImageFile = outFile
             };
         }

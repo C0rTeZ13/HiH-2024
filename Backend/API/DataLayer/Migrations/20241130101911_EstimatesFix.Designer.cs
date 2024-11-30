@@ -3,6 +3,7 @@ using System;
 using DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241130101911_EstimatesFix")]
+    partial class EstimatesFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -86,28 +89,6 @@ namespace DataLayer.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("DataLayer.Entities.Detail", b =>
-                {
-                    b.Property<int>("EstimatesId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("InternalId")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal>("Coast")
-                        .HasColumnType("numeric");
-
-                    b.Property<long>("PaintRateMilliliters")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("SquareMillimeters")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("EstimatesId", "InternalId");
-
-                    b.ToTable("Detail");
-                });
-
             modelBuilder.Entity("DataLayer.Entities.Estimates", b =>
                 {
                     b.Property<int>("EstimatesID")
@@ -116,9 +97,6 @@ namespace DataLayer.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("EstimatesID"));
 
-                    b.Property<long>("CoastPerLiter")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("timestamp with time zone");
 
@@ -126,12 +104,66 @@ namespace DataLayer.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<long>("PaintMillilitersPerSquareMeter")
-                        .HasColumnType("bigint");
+                    b.Property<int>("PayloadId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("ResultFilePath")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("EstimatesID");
+
+                    b.HasIndex("PayloadId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Estimates");
+                });
+
+            modelBuilder.Entity("DataLayer.Models.DetailInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Coast")
+                        .HasColumnType("numeric");
+
+                    b.Property<int?>("EstimatesPayloadId")
+                        .HasColumnType("integer");
+
+                    b.Property<long>("PaintRateMilliliters")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SquareMillimeters")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EstimatesPayloadId");
+
+                    b.ToTable("DetailInfo");
+                });
+
+            modelBuilder.Entity("DataLayer.Models.EstimatesPayload", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<long>("CoastPerLiter")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("PaintMillilitersPerSquareMeter")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("StandardSizeMillimeters")
                         .HasColumnType("bigint");
@@ -142,15 +174,9 @@ namespace DataLayer.Migrations
                     b.Property<long>("TorchWidthMillimeters")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.HasKey("Id");
 
-                    b.HasKey("EstimatesID");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Estimates");
+                    b.ToTable("EstimatesPayload");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -285,22 +311,28 @@ namespace DataLayer.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("DataLayer.Entities.Detail", b =>
-                {
-                    b.HasOne("DataLayer.Entities.Estimates", null)
-                        .WithMany("Details")
-                        .HasForeignKey("EstimatesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("DataLayer.Entities.Estimates", b =>
                 {
+                    b.HasOne("DataLayer.Models.EstimatesPayload", "Payload")
+                        .WithMany()
+                        .HasForeignKey("PayloadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DataLayer.Entities.AppUser", null)
                         .WithMany("Estimates")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Payload");
+                });
+
+            modelBuilder.Entity("DataLayer.Models.DetailInfo", b =>
+                {
+                    b.HasOne("DataLayer.Models.EstimatesPayload", null)
+                        .WithMany("DetailInfos")
+                        .HasForeignKey("EstimatesPayloadId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -359,9 +391,9 @@ namespace DataLayer.Migrations
                     b.Navigation("Estimates");
                 });
 
-            modelBuilder.Entity("DataLayer.Entities.Estimates", b =>
+            modelBuilder.Entity("DataLayer.Models.EstimatesPayload", b =>
                 {
-                    b.Navigation("Details");
+                    b.Navigation("DetailInfos");
                 });
 #pragma warning restore 612, 618
         }

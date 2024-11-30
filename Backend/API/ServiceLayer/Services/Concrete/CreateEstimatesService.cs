@@ -1,4 +1,5 @@
-﻿using ServiceLayer.Models;
+﻿using DataLayer.Entities;
+using ServiceLayer.Models;
 using System;
 
 namespace ServiceLayer.Services.Concrete
@@ -18,7 +19,7 @@ namespace ServiceLayer.Services.Concrete
             IEnumerable<DetailInfo> detailInfos = detailAreas.Select(area => GetDetailInfo(area, inDto));
             return new DrawEstimatesOutDto()
             {
-                DetailsEstimates = detailInfos,
+                DetailInfos = detailInfos,
                 ImageFilePath = outFilePath
             };
         }

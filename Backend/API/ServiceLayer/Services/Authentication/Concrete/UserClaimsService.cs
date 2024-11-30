@@ -26,5 +26,10 @@ namespace ServiceLayer.Services.Authentication.Concrete
             }
             return claims;
         }
+
+        public string GetUserId(ClaimsPrincipal user)
+        {
+            return user.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+        }
     }
 }

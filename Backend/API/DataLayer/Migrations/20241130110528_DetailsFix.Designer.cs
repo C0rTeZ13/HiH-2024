@@ -3,6 +3,7 @@ using System;
 using DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241130110528_DetailsFix")]
+    partial class DetailsFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -86,16 +89,22 @@ namespace DataLayer.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("DataLayer.Entities.Detail", b =>
+            modelBuilder.Entity("DataLayer.Entities.DetailEstimates", b =>
                 {
+                    b.Property<int>("DetailEstimatesId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("DetailEstimatesId"));
+
+                    b.Property<decimal>("Coast")
+                        .HasColumnType("numeric");
+
                     b.Property<int>("EstimatesId")
                         .HasColumnType("integer");
 
                     b.Property<int>("InternalId")
                         .HasColumnType("integer");
-
-                    b.Property<decimal>("Coast")
-                        .HasColumnType("numeric");
 
                     b.Property<long>("PaintRateMilliliters")
                         .HasColumnType("bigint");
@@ -103,24 +112,29 @@ namespace DataLayer.Migrations
                     b.Property<long>("SquareMillimeters")
                         .HasColumnType("bigint");
 
-                    b.HasKey("EstimatesId", "InternalId");
+                    b.HasKey("DetailEstimatesId");
 
-                    b.ToTable("Detail");
+                    b.HasIndex("EstimatesId");
+
+                    b.ToTable("DetailEstimates");
                 });
 
             modelBuilder.Entity("DataLayer.Entities.Estimates", b =>
                 {
-                    b.Property<int>("EstimatesID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("EstimatesID"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<long>("CoastPerLiter")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("EstimatesID")
+                        .HasColumnType("integer");
 
                     b.Property<string>("OriginFilePath")
                         .IsRequired()
@@ -146,7 +160,7 @@ namespace DataLayer.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("EstimatesID");
+                    b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
@@ -285,7 +299,7 @@ namespace DataLayer.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("DataLayer.Entities.Detail", b =>
+            modelBuilder.Entity("DataLayer.Entities.DetailEstimates", b =>
                 {
                     b.HasOne("DataLayer.Entities.Estimates", null)
                         .WithMany("Details")

@@ -1,4 +1,5 @@
-﻿using ServiceLayer.Models;
+﻿using DataLayer.Entities;
+using ServiceLayer.Models;
 
 namespace API.Models
 {

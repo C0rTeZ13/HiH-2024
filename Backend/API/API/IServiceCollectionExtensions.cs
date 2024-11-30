@@ -26,6 +26,7 @@ namespace API
             services.AddScoped<IDetailsPaintingAreaService, TestDetailsPaintingAreaService>();
             services.AddScoped<IFilePathService, FilePathService>();
             services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IEstimatesStorageService, EstimatesStorageService>();
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ISignInService, SignInService>();

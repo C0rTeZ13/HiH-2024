@@ -7,6 +7,7 @@ namespace DataLayer
 {
     public class AppDbContext : IdentityDbContext<AppUser>
     {
+        public DbSet<Estimates> Estimates { get; set; }
         public AppDbContext() : base() { }
         public AppDbContext(DbContextOptions dbContextOptions) : base(dbContextOptions) { }
 
@@ -18,7 +19,8 @@ namespace DataLayer
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.ApplyConfiguration(new AppUserConfig());
+            builder.ApplyConfiguration(new AppUserConfig());           
+            builder.ApplyConfiguration(new DetailConfig());           
         }
     }
 }

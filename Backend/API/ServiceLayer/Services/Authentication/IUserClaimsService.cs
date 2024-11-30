@@ -6,5 +6,6 @@ namespace ServiceLayer.Services.Authentication
     public interface IUserClaimsService
     {
         public Task<IEnumerable<Claim>> GetUserClaimsAsync(AppUser user, CancellationToken cancellationToken);
+        public string GetUserId(ClaimsPrincipal user);
     }
 }
