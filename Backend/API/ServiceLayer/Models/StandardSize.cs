@@ -1,9 +1,9 @@
 ﻿namespace ServiceLayer.Models
 {
-    public class StandardSize
+    public enum StandardDetail
     {
-        public uint? FrontDoorMillimeters { get; set; }
-        public uint? BonnetMillimeters { get; set; }
-        public uint? TrunkLidMillimeters { get; set; }
+        FrontDoor,
+        Bonnet,
+        TrunkLid
     }
 }

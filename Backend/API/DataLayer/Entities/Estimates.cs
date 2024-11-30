@@ -7,6 +7,7 @@
         public string ResultFilePath { get; set; }
         public DateTime DateTime { get; set; }
         public uint StandardSizeMillimeters { get; set; }
+        public string StandardDetail {  get; set; }
         public uint TorchWidthMillimeters { get; set; }
         public uint TorchTakeoffMillimeters { get; set; }
         public uint CoastPerLiter { get; set; }

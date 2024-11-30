@@ -21,19 +21,19 @@ namespace ServiceLayer.Services.Concrete
                 OriginFilePath = inDto.ImageFilePath,
                 ResultFilePath = outDto.ImageFilePath,
                 UserId = userId,
-
-                    CoastPerLiter = inDto.CoastPerLiter,
-                    Details = outDto.DetailInfos.Select(d => new Detail
-                    {
-                        Coast = d.Coast,
-                        InternalId = d.Id,
-                        PaintRateMilliliters = d.PaintRateMilliliters,
-                        SquareMillimeters = d.SquareMillimeters
-                    }).ToList(),
-                    PaintMillilitersPerSquareMeter = inDto.PaintMillilitersPerSquareMeter,
-                    StandardSizeMillimeters = inDto.StandardSize.FrontDoorMillimeters.Value,
-                    TorchTakeoffMillimeters = inDto.TorchTakeoffMillimeters,
-                    TorchWidthMillimeters = inDto.TorchWidthMillimeters
+                StandardDetail = inDto.StandardDetail.ToString(),
+                CoastPerLiter = inDto.CoastPerLiter,
+                Details = outDto.DetailInfos.Select(d => new Detail
+                {
+                    Coast = d.Coast,
+                    InternalId = d.Id,
+                    PaintRateMilliliters = d.PaintRateMilliliters,
+                    SquareMillimeters = d.SquareMillimeters
+                }).ToList(),
+                PaintMillilitersPerSquareMeter = inDto.PaintMillilitersPerSquareMeter,
+                StandardSizeMillimeters = inDto.StandardSizeMillimeters,
+                TorchTakeoffMillimeters = inDto.TorchTakeoffMillimeters,
+                TorchWidthMillimeters = inDto.TorchWidthMillimeters
 
             };
 

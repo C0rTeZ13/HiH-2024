@@ -39,12 +39,8 @@ namespace API.Controllers
                 ImageFilePath = originImageFilePath,
                 CoastPerLiter = request.CoastPerLiter,
                 PaintMillilitersPerSquareMeter = request.PaintMillilitersPerSquareMeter,
-                StandardSize = new StandardSize()
-                {
-                    BonnetMillimeters = request.BonnetMillimeters,
-                    FrontDoorMillimeters = request.FrontDoorMillimeters,
-                    TrunkLidMillimeters = request.TrunkLidMillimeters
-                },
+                StandardSizeMillimeters = request.StandardSizeMillimeters,
+                StandardDetail = Enum.Parse<StandardDetail>(request.StandardDetail),
                 TorchTakeoffMillimeters = request.TorchTakeoffMillimeters,
                 TorchWidthMillimeters = request.TorchWidthMillimeters
             };
