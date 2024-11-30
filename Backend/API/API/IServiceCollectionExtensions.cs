@@ -20,11 +20,6 @@ namespace API
 {
     public static class IServiceCollectionExtensions
     {
-        public static void AddAppAuthorization(this IServiceCollection services)
-        {
-
-        }
-
         public static void AddAppServices(this IServiceCollection services)
         {
             services.AddScoped<ICreateEstimatesService, CreateEstimatesService>();

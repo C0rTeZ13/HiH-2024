@@ -1,4 +1,5 @@
 using API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServiceLayer.Models;
 using ServiceLayer.Services;
@@ -7,6 +8,7 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class DrawEstimatesController : ControllerBase
     {
         private readonly ICreateEstimatesService _estimatesService;
