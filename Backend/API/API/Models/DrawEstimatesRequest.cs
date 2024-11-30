@@ -1,6 +1,4 @@
-﻿using ServiceLayer.Models;
-
-namespace API.Models
+﻿namespace API.Models
 {
     public class DrawEstimatesRequest
     {
