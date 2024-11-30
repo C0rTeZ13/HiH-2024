@@ -1,5 +1,6 @@
 ﻿using DataLayer;
 using DataLayer.Entities;
+using Microsoft.EntityFrameworkCore;
 using ServiceLayer.Models;
 
 namespace ServiceLayer.Services.Concrete
@@ -11,6 +12,27 @@ namespace ServiceLayer.Services.Concrete
         public EstimatesStorageService(AppDbContext dbbContext)
         {
             _dbContext = dbbContext;
+        }
+
+        public Estimates? GetEstimates(int id)
+        {
+            return _dbContext.Estimates
+                 .AsNoTracking()
+                 .Include(e => e.Details)
+                 .FirstOrDefault(e => e.EstimatesID == id);
+        }
+
+        public IEnumerable<EstimatesListDto> GetUserEstimates(string userId)
+        {
+            return _dbContext.Estimates
+                 .AsNoTracking()
+                 .Where(e => e.UserId == userId)
+                 .Select(u => new EstimatesListDto()
+                 {
+                     Id = u.EstimatesID,
+                     DateTime = u.DateTime,
+                     Name = Path.GetFileName(u.OriginFilePath)
+                 });
         }
 
         public void SaveEstimates(DrawEstimatesInDto inDto, DrawEstimatesOutDto outDto, string userId)

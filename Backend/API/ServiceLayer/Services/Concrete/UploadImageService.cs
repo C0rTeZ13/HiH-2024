@@ -1,5 +1,7 @@
 ﻿using DataLayer;
 using DataLayer.Entities;
+using Microsoft.EntityFrameworkCore;
+using ServiceLayer.Models;
 
 namespace ServiceLayer.Services.Concrete
 {
@@ -16,6 +18,18 @@ namespace ServiceLayer.Services.Concrete
         {
             UploadedImage? image = _dbContext.Images.FirstOrDefault(i => i.UploadedImageId == fileId);
             return image?.Path;
+        }
+
+        public IEnumerable<UploadedImageDto> GetUserImages(string userId)
+        {
+            return _dbContext.Images
+                .AsNoTracking()
+                .Where(i => i.UserId == userId)
+                .Select(i => new UploadedImageDto()
+                {
+                    Id = i.UploadedImageId,
+                    Name = i.Name
+                });
         }
 
         public int SaveImageInfo(string path, string name, string userId)
