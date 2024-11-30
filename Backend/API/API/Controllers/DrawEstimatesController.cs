@@ -1,4 +1,5 @@
 using API.Models;
+using DataLayer.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServiceLayer.Models;
@@ -8,7 +9,7 @@ using ServiceLayer.Services.Authentication;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     [Authorize]
     public class DrawEstimatesController : ControllerBase
     {
@@ -31,7 +32,7 @@ namespace API.Controllers
 
         [Produces<DrawEstimatesResponse>]
         [HttpPost]
-        public ActionResult<DrawEstimatesResponse> DrawEstimates(DrawEstimatesRequest request)
+        public ActionResult<DrawEstimatesResponse> CreateEstimates(DrawEstimatesRequest request)
         {
             string? originImageFilePath = _uploadImageService.GetPathById(request.OriginImageId);
             if (originImageFilePath == null) return NotFound();
@@ -58,6 +59,35 @@ namespace API.Controllers
             {
                 DetailsEstimates = outDto.DetailInfos,
                 ImageFile = outFile
+            };
+        }
+
+        [HttpGet]
+        public IEnumerable<EstimatesListDto> GetList()
+        {
+            string userId = _userClaimsService.GetUserId(User);
+            return _estimatesStorageService.GetUserEstimates(userId);
+        }
+
+        [HttpGet]
+        public ActionResult<DrawEstimatesResponse> GetEstimates(int id)
+        {
+            Estimates? estimates = _estimatesStorageService.GetEstimates(id);
+            if (estimates == null) return NotFound();
+
+            string userId = _userClaimsService.GetUserId(User);
+            if (estimates.UserId != userId) return Forbid();
+
+            return new DrawEstimatesResponse()
+            {
+                DetailsEstimates = estimates.Details.Select(d => new DetailInfo()
+                {
+                    Coast = d.Coast,
+                    Id = d.EstimatesId,
+                    PaintRateMilliliters = d.PaintRateMilliliters,
+                    SquareMillimeters = d.SquareMillimeters
+                }),
+                ImageFile = _fileService.GetFileAtPath(estimates.ResultFilePath)
             };
         }
     }

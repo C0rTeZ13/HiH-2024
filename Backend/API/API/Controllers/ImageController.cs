@@ -1,6 +1,8 @@
 ﻿using API.Models;
+using DataLayer.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ServiceLayer.Models;
 using ServiceLayer.Services;
 using ServiceLayer.Services.Authentication;
 
@@ -25,16 +27,22 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public ActionResult<UploadedImageResponse> UploadImage(IFormFile file)
+        public ActionResult<UploadedImageDto> UploadImage(IFormFile file)
         {
             string originImageFilePath = _pathService.CreateOriginFilePath(file.FileName);
             _fileService.WriteFileToPath(file, originImageFilePath);
             int imageId = _uploadImageService.SaveImageInfo(originImageFilePath, file.FileName, _userClaimsService.GetUserId(User));
-            return new UploadedImageResponse()
+            return new UploadedImageDto()
             {
                 Id = imageId,
                 Name = file.FileName,
             };
+        }
+
+        [HttpGet]
+        public IEnumerable<UploadedImageDto> UserImages()
+        {
+            return _uploadImageService.GetUserImages(_userClaimsService.GetUserId(User));
         }
     }
 }
