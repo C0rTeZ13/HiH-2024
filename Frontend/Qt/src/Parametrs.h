@@ -23,7 +23,6 @@ class CParametrs : public QWidget
 public:
     explicit CParametrs(QWidget *parent = nullptr);
     ~CParametrs();
-
     QString getImage();
     StructSize* getStandartSize();
     int getTorchWidth();

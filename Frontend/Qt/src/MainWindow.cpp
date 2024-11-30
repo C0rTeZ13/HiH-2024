@@ -70,4 +70,3 @@ void CMainWindow::on_btn_calc_clicked()
         }
     });
 }
-

@@ -145,4 +145,3 @@ void CParametrs::on_icon_imageFile_clicked()
     ui->text_imageFile->setText(str);
     on_text_imageFile_textEdited(str);
 }
-
