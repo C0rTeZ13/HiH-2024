@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/folder.png</file>
+        <file>resources/folder_invert.png</file>
+    </qresource>
+</RCC>

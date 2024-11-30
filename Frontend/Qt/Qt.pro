@@ -10,20 +10,40 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
-    MainWindow.cpp
+    src/MainWindow.cpp \
+    src/Parametrs.cpp \
+    src/RecognizeObjects.cpp \
+    src/Scene/ImageScene.cpp \
 
 HEADERS += \
-    MainWindow.h
+    src/MainWindow.h \
+    src/Parametrs.h \
+    src/RecognizeObjects.h \
+    src/Scene/ImageScene.h \
 
 FORMS += \
-    MainWindow.ui
+    ui/MainWindow.ui \
+    ui/Parametrs.ui \
+    ui/RecognizeObjects.ui
 
 TRANSLATIONS += \
     Qt_ru_RU.ts
 CONFIG += lrelease
 CONFIG += embed_translations
 
+INCLUDEPATH = \
+    ui/         \
+    src/        \
+    src/Scene   \
+
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    Resource.qrc
+
+DISTFILES += \
+    resources/folder.png \
+    resources/folder_invert.png
