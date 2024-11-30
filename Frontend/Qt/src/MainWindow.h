@@ -15,8 +15,12 @@ public:
     CMainWindow(QWidget *parent = nullptr);
     ~CMainWindow();
 
+    void setAuthorize(QString login);
+
 private slots:
     void on_btn_calc_clicked();
+
+    void setScene(QString filepath);
 
 private:
     Ui::CMainWindow *ui;

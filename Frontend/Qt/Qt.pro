@@ -11,18 +11,21 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
+    src/Authorization.cpp \
     src/MainWindow.cpp \
     src/Parametrs.cpp \
     src/RecognizeObjects.cpp \
     src/Scene/ImageScene.cpp \
 
 HEADERS += \
+    src/Authorization.h \
     src/MainWindow.h \
     src/Parametrs.h \
     src/RecognizeObjects.h \
     src/Scene/ImageScene.h \
 
 FORMS += \
+    ui/Authorization.ui \
     ui/MainWindow.ui \
     ui/Parametrs.ui \
     ui/RecognizeObjects.ui

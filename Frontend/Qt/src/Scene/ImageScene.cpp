@@ -5,3 +5,8 @@ CImageScene::CImageScene(QWidget *parent)
 {
 
 }
+
+void CImageScene::setScene(QImage *img)
+{
+    scene = img;
+}

@@ -11,6 +11,19 @@ CParametrs::CParametrs(QWidget *parent) :
     ui(new Ui::CParametrs)
 {
     ui->setupUi(this);
+
+    m_cmbMap =
+    {
+        {EDetail::FrontDoor, "FrontDoor"},
+        {EDetail::Bonnet, "Bonnet"},
+        {EDetail::TrunkLid, "TrunkLid"},
+    };
+
+    for (QString str : m_cmbMap)
+    {
+        ui->cmb_standardDetail->addItem(str);
+    }
+
 }
 
 CParametrs::~CParametrs()
@@ -23,119 +36,16 @@ QString CParametrs::getImage()
     return m_fileName;
 }
 
-StructSize* CParametrs::getStandartSize()
+StructParams *CParametrs::getParams()
 {
-    return &m_standartSize;
-}
-
-int CParametrs::getTorchWidth()
-{
-    return m_torchWidth;
-}
-
-int CParametrs::getTorchTakeOff()
-{
-    return m_torchTakeOff;
-}
-
-int CParametrs::getCostPerLiter()
-{
-    return m_costPerLiter;
-}
-
-int CParametrs::getPaintMmPerSquareMeter()
-{
-    return m_paintMmPerSquareMeter;
+    return &m_params;
 }
 
 void CParametrs::on_text_imageFile_textEdited(const QString &arg1)
 {
     m_fileName = arg1;
-    qDebug() << m_fileName;
-}
 
-void CParametrs::on_edit_frontDoor_textEdited(const QString &arg1)
-{
-    if (auto number = arg1.toInt())
-    {
-        m_standartSize.m_frontDoor = number;
-    }
-    else
-    {
-        //emit error
-    }
-}
-
-void CParametrs::on_edit_bonnet_textEdited(const QString &arg1)
-{
-    if (auto number = arg1.toInt())
-    {
-        m_standartSize.m_bonnet = number;
-    }
-    else
-    {
-        //emit error
-    }
-}
-
-void CParametrs::on_edit_trunkLink_textEdited(const QString &arg1)
-{
-    if (auto number = arg1.toInt())
-    {
-        m_standartSize.m_trunkLid = number;
-    }
-    else
-    {
-        //emit error
-    }
-}
-
-void CParametrs::on_edit_tourchWidth_textEdited(const QString &arg1)
-{
-    if (auto number = arg1.toInt())
-    {
-        m_torchWidth = number;
-    }
-    else
-    {
-        //emit error
-    }
-}
-
-void CParametrs::on_edit_tourchTakeOff_textEdited(const QString &arg1)
-{
-    if (auto number = arg1.toInt())
-    {
-        m_torchTakeOff = number;
-    }
-    else
-    {
-        //emit error
-    }
-}
-
-void CParametrs::on_edit_costPerLiter_textEdited(const QString &arg1)
-{
-    if (auto number = arg1.toInt())
-    {
-        m_costPerLiter = number;
-    }
-    else
-    {
-        //emit error
-    }
-}
-
-void CParametrs::on_edit_name_paintMmPerSquareMeter_textEdited(const QString &arg1)
-{
-    if (auto number = arg1.toInt())
-    {
-        m_paintMmPerSquareMeter = number;
-    }
-    else
-    {
-        //emit error
-    }
+    emit sig_imageChanged(m_fileName);
 }
 
 void CParametrs::on_icon_imageFile_clicked()
@@ -145,3 +55,74 @@ void CParametrs::on_icon_imageFile_clicked()
     ui->text_imageFile->setText(str);
     on_text_imageFile_textEdited(str);
 }
+
+void CParametrs::on_edit_standardSizeMillimeters_textEdited(const QString &arg1)
+{
+    if (auto number = arg1.toInt())
+    {
+        m_params.m_standardSizeMillimeters = number;
+    }
+    else
+    {
+        //emit error
+    }
+}
+
+
+void CParametrs::on_edit_torchWidthMillimeters_textEdited(const QString &arg1)
+{
+    if (auto number = arg1.toInt())
+    {
+        m_params.m_torchWidthMillimeters = number;
+    }
+    else
+    {
+        //emit error
+    }
+}
+
+
+void CParametrs::on_edit_tourchTakeOff_textEdited(const QString &arg1)
+{
+    if (auto number = arg1.toInt())
+    {
+        m_params.m_torchTakeoffMillimeters = number;
+    }
+    else
+    {
+        //emit error
+    }
+}
+
+
+void CParametrs::on_edit_costPerLiter_textEdited(const QString &arg1)
+{
+    if (auto number = arg1.toInt())
+    {
+        m_params.m_coastPerLiter = number;
+    }
+    else
+    {
+        //emit error
+    }
+}
+
+
+void CParametrs::on_edit_name_paintMmPerSquareMeter_textEdited(const QString &arg1)
+{
+    if (auto number = arg1.toInt())
+    {
+        m_params.m_paintMillilitersPerSquareMeter = number;
+    }
+    else
+    {
+        //emit error
+    }
+}
+
+
+void CParametrs::on_cmb_standardDetail_currentIndexChanged(int index)
+{
+    m_params.standardDetail = m_cmbMap[index];
+}
+

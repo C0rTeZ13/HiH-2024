@@ -10,6 +10,8 @@
 #include <QBuffer>
 #include <QDebug>
 
+#include <Authorization.h>
+
 CMainWindow::CMainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::CMainWindow)
@@ -19,6 +21,8 @@ CMainWindow::CMainWindow(QWidget *parent)
     //setWindowFlags(Qt::FramelessWindowHint| Qt::WindowSystemMenuHint);
     // to fix taskbar minimize feature
     //setWindowFlags(windowFlags() | Qt::WindowMinimizeButtonHint);
+
+    connect(ui->params, &CParametrs::sig_imageChanged, this, &CMainWindow::setScene);
 
 }
 
@@ -31,19 +35,24 @@ void CMainWindow::on_btn_calc_clicked()
 {
     QString imageName = ui->params->getImage();
     QImage image(imageName);
-    auto size = ui->params->getStandartSize();
-    int torchWidth = ui->params->getTorchWidth();
-    int torchTakeOff = ui->params->getTorchTakeOff();
-    int costPerLiter = ui->params->getCostPerLiter();
-    int paintMmPerSquareMeter = ui->params->getPaintMmPerSquareMeter();
+
+    StructParams params = *ui->params->getParams();
+
+    //auto size = ui->params->getStandartSize();
+    int standartSizeMillimeters = params.m_standardSizeMillimeters;
+    QString standardDetail = params.standardDetail;
+    int torchWidth = params.m_torchWidthMillimeters;
+    int torchTakeOff = params.m_paintMillilitersPerSquareMeter;
+    int costPerLiter = params.m_coastPerLiter;
+    int paintMmPerSquareMeter = params.m_paintMillilitersPerSquareMeter;
 
     QNetworkAccessManager *manager = new QNetworkAccessManager ();
-    QUrl url("Your awesome url");
+    QUrl url("http://94.103.84.36:5086/");
     QNetworkRequest request(url);
 
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
-    QJsonArray sizeArray = {size->m_bonnet, size->m_frontDoor, size->m_trunkLid};
+    //QJsonArray sizeArray = {size->m_bonnet, size->m_frontDoor, size->m_trunkLid};
     QByteArray byteArray;
     QBuffer buffer(&byteArray);
     image.save(&buffer, "PNG");
@@ -52,11 +61,13 @@ void CMainWindow::on_btn_calc_clicked()
     QJsonObject json;
 
     json["image"] = QString::fromLatin1(base64Data);
-    json["size"] = sizeArray;
-    json["torchWidth"] = torchWidth;
-    json["torchTakeOff"] = torchTakeOff;
-    json["costPerLiter"] = costPerLiter;
-    json["paintMmPerSquareMeter"] = paintMmPerSquareMeter;
+    //json["size"] = sizeArray;
+    json["standardSizeMillimeters"] = standartSizeMillimeters;
+    json["standardDetail"] = standardDetail;
+    json["torchWidthMillimeters"] = torchWidth;
+    json["torchTakeoffMillimeters"] = torchTakeOff;
+    json["coastPerLiter"] = costPerLiter;
+    json["paintMillilitersPerSquareMeter"] = paintMmPerSquareMeter;
 
     QJsonDocument doc(json);
     QByteArray data = doc.toJson();
@@ -69,4 +80,16 @@ void CMainWindow::on_btn_calc_clicked()
             qDebug() << "Ошибка: " << reply->errorString();
         }
     });
+}
+
+void CMainWindow::setScene(QString filepath)
+{
+    QImage* img = new QImage(filepath);
+
+    ui->imageScene->setScene(img);
+}
+
+void CMainWindow::setAuthorize(QString login)
+{
+    ui->edit_login->setText(login);
 }
