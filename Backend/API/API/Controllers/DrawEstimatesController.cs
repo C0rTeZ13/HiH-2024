@@ -58,7 +58,12 @@ namespace API.Controllers
             return new DrawEstimatesResponse()
             {
                 DetailsEstimates = outDto.DetailInfos,
-                ImageFile = outFile
+                ImageFile = outFile,
+                CoastPerLiter = inDto.CoastPerLiter,
+                StandardDetail = inDto.StandardDetail.ToString(),
+                StandardSizeMillimeters = inDto.StandardSizeMillimeters,
+                TorchTakeoffMillimeters = inDto.TorchTakeoffMillimeters,
+                TorchWidthMillimeters = inDto.TorchWidthMillimeters
             };
         }
 
@@ -87,7 +92,12 @@ namespace API.Controllers
                     PaintRateMilliliters = d.PaintRateMilliliters,
                     SquareMillimeters = d.SquareMillimeters
                 }),
-                ImageFile = _fileService.GetFileAtPath(estimates.ResultFilePath)
+                ImageFile = _fileService.GetFileAtPath(estimates.ResultFilePath),
+                CoastPerLiter = estimates.CoastPerLiter,
+                StandardDetail = estimates.StandardDetail,
+                StandardSizeMillimeters = estimates.StandardSizeMillimeters,
+                TorchTakeoffMillimeters = estimates.TorchTakeoffMillimeters,
+                TorchWidthMillimeters = estimates.TorchWidthMillimeters
             };
         }
     }
