@@ -50,12 +50,13 @@ void CMainWindow::sendImageToServer(const QImage &image)
     filePart.setHeader(QNetworkRequest::ContentDispositionHeader,
                        QVariant("form-data; name=\"file\"; " + filename));
     filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("image/jpeg"));
-    filePart.setBody(byteArray);
+    filePart.setBody(byteArray.toBase64());
     multiPart->append(filePart);
 
     QUrl url(_url + "Image/UploadImage");
     QNetworkRequest request(url);
-    QString authHeader = "Bearer " + _adminToken;
+    QByteArray encodedCredentials = (_login + ":" + _password).toUtf8().toBase64();
+    QString authHeader = "Bearer " + _token;
     request.setRawHeader("Authorization", authHeader.toUtf8());
 
     QNetworkAccessManager *imageManager = new QNetworkAccessManager(this);
@@ -72,7 +73,8 @@ void CMainWindow::sendDataToServer(QJsonObject json)
     QNetworkAccessManager *manager = new QNetworkAccessManager();
     QUrl lUrl(_url + "DrawEstimates/CreateEstimates");
     QNetworkRequest request(lUrl);
-    QString authHeader = "Bearer " + _adminToken;
+    QByteArray encodedCredentials = (_login + ":" + _password).toUtf8().toBase64();
+    QString authHeader = "Bearer " + _token;
     request.setRawHeader(QByteArray("Authorization"), QByteArray(authHeader.toUtf8()));
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     QJsonDocument doc(json);
@@ -115,7 +117,24 @@ void CMainWindow::onDataUpload()
 {
     QNetworkReply *reply = qobject_cast<QNetworkReply *>(sender());
     if(reply->error() == QNetworkReply::NoError) {
-        // ОБРАБОТАN ТОГО, КОГДА ВСЁ ЗАЕБИСЬ
+        QByteArray responsedData = reply->readAll();
+        QJsonDocument jsonDoc = QJsonDocument::fromJson(responsedData);
+        if (!jsonDoc.isObject()) {
+            qDebug() << "Invalid JSON respons";
+            return;
+        }
+        QJsonObject responseObject = jsonDoc.object();
+        QString image = responseObject["imageFile"].toString();
+        qDebug() << "Image data: " << image;
+        QByteArray imageData = QByteArray::fromBase64(image.toUtf8());
+        QFile imageFile("testRecievedImage.jpg");
+        if (imageFile.open(QIODevice::WriteOnly)) {
+            imageFile.write(imageData);
+            imageFile.close();
+            qDebug() << "Image recieved and saved";
+        } else {
+            qDebug() << "Failed to save image";
+        }
     } else {
         qDebug() << "Error in data uploading" << reply->errorString();
     }
@@ -139,6 +158,12 @@ void CMainWindow::setScene(QString filepath)
 void CMainWindow::setAuthorize(QString login)
 {
     ui->edit_login->setText(login);
+}
+
+void CMainWindow::setUser(QString login, QString password)
+{
+    _login = login;
+    _password = password;
 }
 
 void CMainWindow::setToken(QString token)

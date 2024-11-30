@@ -57,6 +57,7 @@ void CAuthorization::authorizeResponse()
                 QString token = jsonObj["token"].toString();
                 qDebug() << "Авторизация успешна. Токен:" << token;
                 w.setToken(jsonObj["token"].toString());
+                w.setUser(m_login, m_password);
             }
         }
 
