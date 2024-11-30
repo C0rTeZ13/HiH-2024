@@ -39,19 +39,23 @@ public:
     QString getImage();
     StructParams* getParams();
 
+    void save();
+    void load();
+
 signals:
     void sig_imageChanged(QString filepath);
 
 private slots:
-    void on_text_imageFile_textEdited(const QString &arg1);
-    void on_icon_imageFile_clicked();
-    void on_edit_standardSizeMillimeters_textEdited(const QString &arg1);
-    void on_edit_torchWidthMillimeters_textEdited(const QString &arg1);
-    void on_edit_tourchTakeOff_textEdited(const QString &arg1);
-    void on_edit_costPerLiter_textEdited(const QString &arg1);
-    void on_edit_name_paintMmPerSquareMeter_textEdited(const QString &arg1);
+    void on_text_imageFile_textChanged(const QString &arg1);
 
+    void on_icon_imageFile_clicked();
     void on_cmb_standardDetail_currentIndexChanged(int index);
+
+    void on_edit_torchWidthMillimeters_textChanged(const QString &arg1);
+    void on_edit_tourchTakeOff_textChanged(const QString &arg1);
+    void on_edit_costPerLiter_textChanged(const QString &arg1);
+    void on_edit_name_paintMmPerSquareMeter_textChanged(const QString &arg1);
+    void on_edit_standardSizeMillimeters_textChanged(const QString &arg1);
 
 private:
     //Params
