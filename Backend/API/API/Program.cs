@@ -1,3 +1,6 @@
+using ServiceLayer.Services;
+using ServiceLayer.Services.Concrete;
+
 namespace API
 {
     public class Program
@@ -9,6 +12,11 @@ namespace API
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddScoped<ICreateEstimatesService, CreateEstimatesService>();
+            builder.Services.AddScoped<IDetailsPaintingAreaService, TestDetailsPaintingAreaService>();
+            builder.Services.AddScoped<IFilePathService, FilePathService>();
+            builder.Services.AddScoped<IFileService, FileService>();
 
             var app = builder.Build();
 
