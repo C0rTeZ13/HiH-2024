@@ -17,22 +17,24 @@ namespace API.Controllers
         private readonly IFilePathService _pathService;
         private readonly IEstimatesStorageService _estimatesStorageService;
         private readonly IUserClaimsService _userClaimsService;
+        private readonly IUploadImageService _uploadImageService;
 
-        public DrawEstimatesController(ICreateEstimatesService estimatesCreateService, IFileService fileService, IFilePathService pathService, IEstimatesStorageService estimatesStorageService, IUserClaimsService userClaimsService)
+        public DrawEstimatesController(ICreateEstimatesService estimatesCreateService, IFileService fileService, IFilePathService pathService, IEstimatesStorageService estimatesStorageService, IUserClaimsService userClaimsService, IUploadImageService uploadImageService)
         {
             _estimatesCreateService = estimatesCreateService;
             _fileService = fileService;
             _pathService = pathService;
             _estimatesStorageService = estimatesStorageService;
             _userClaimsService = userClaimsService;
+            _uploadImageService = uploadImageService;
         }
 
         [Produces<DrawEstimatesResponse>]
         [HttpPost]
-        public DrawEstimatesResponse DrawEstimates(DrawEstimatesRequest request)
+        public ActionResult<DrawEstimatesResponse> DrawEstimates(DrawEstimatesRequest request)
         {
-            string originImageFilePath = _pathService.CreateOriginFilePath(request.ImageFile.FileName);
-            _fileService.WriteFileToPath(request.ImageFile, originImageFilePath);
+            string? originImageFilePath = _uploadImageService.GetPathById(request.OriginImageId);
+            if (originImageFilePath == null) return NotFound();
 
             DrawEstimatesInDto inDto = new()
             {
@@ -45,7 +47,7 @@ namespace API.Controllers
                 TorchWidthMillimeters = request.TorchWidthMillimeters
             };
 
-            string outImageFilePath = _pathService.CreateOutFilePath(request.ImageFile.FileName);
+            string outImageFilePath = _pathService.CreateOutFilePath(originImageFilePath);
             DrawEstimatesOutDto outDto = _estimatesCreateService.GetDrawEstimates(inDto, outImageFilePath);
 
             string userId = _userClaimsService.GetUserId(User);

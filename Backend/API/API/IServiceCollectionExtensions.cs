@@ -27,6 +27,7 @@ namespace API
             services.AddScoped<IFilePathService, FilePathService>();
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IEstimatesStorageService, EstimatesStorageService>();
+            services.AddScoped<IUploadImageService, UploadImageService>();
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ISignInService, SignInService>();

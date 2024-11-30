@@ -8,6 +8,7 @@ namespace DataLayer
     public class AppDbContext : IdentityDbContext<AppUser>
     {
         public DbSet<Estimates> Estimates { get; set; }
+        public DbSet<UploadedImage> Images { get; set; }
         public AppDbContext() : base() { }
         public AppDbContext(DbContextOptions dbContextOptions) : base(dbContextOptions) { }
 

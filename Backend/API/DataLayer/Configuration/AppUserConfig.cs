@@ -11,6 +11,9 @@ namespace DataLayer.Configuration
             builder.HasMany(u => u.Estimates)
                 .WithOne()
                 .HasForeignKey(e => e.UserId);
+            builder.HasMany(u => u.Images)
+                .WithOne()
+                .HasForeignKey(e => e.UserId);
         }
     }
 }

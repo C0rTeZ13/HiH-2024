@@ -4,7 +4,7 @@ namespace API.Models
 {
     public class DrawEstimatesRequest
     {
-        public IFormFile ImageFile { get; set; }
+        public int OriginImageId { get; set; }
         public uint StandardSizeMillimeters { get; set; }
         public string StandardDetail { get; set; }
         public uint TorchWidthMillimeters { get; set; }
