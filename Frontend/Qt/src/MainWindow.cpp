@@ -11,6 +11,7 @@
 #include <QDebug>
 
 #include <Authorization.h>
+#include <QSaveFile>
 
 CMainWindow::CMainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -93,3 +94,15 @@ void CMainWindow::setAuthorize(QString login)
 {
     ui->edit_login->setText(login);
 }
+
+void CMainWindow::on_btn_save_clicked()
+{
+    ui->params->save();
+}
+
+
+void CMainWindow::on_btn_load_clicked()
+{
+    ui->params->load();
+}
+

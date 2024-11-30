@@ -590,7 +590,11 @@ border-color: rgb(88, 88, 88)</string>
        </widget>
       </item>
       <item row="2" column="2">
-       <widget class="QComboBox" name="cmb_standardDetail"/>
+       <widget class="QComboBox" name="cmb_standardDetail">
+        <property name="styleSheet">
+         <string notr="true">color: rgb(255, 255, 255)</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
