@@ -12,6 +12,8 @@
 
 #include <Authorization.h>
 #include <QHttpPart>
+#include <QSaveFile>
+
 
 CMainWindow::CMainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -169,4 +171,14 @@ void CMainWindow::setUser(QString login, QString password)
 void CMainWindow::setToken(QString token)
 {
     _token = token;
+}
+void CMainWindow::on_btn_save_clicked()
+{
+    ui->params->save();
+}
+
+
+void CMainWindow::on_btn_load_clicked()
+{
+    ui->params->load();
 }
