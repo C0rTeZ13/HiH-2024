@@ -26,6 +26,9 @@ CMainWindow::CMainWindow(QWidget *parent)
     //setWindowFlags(windowFlags() | Qt::WindowMinimizeButtonHint);
 
     connect(ui->params, &CParametrs::sig_imageChanged, this, &CMainWindow::setScene);
+    connect(ui->params, &CParametrs::sig_imageChanged, ui->widget_objects, &CRecognizeObjects::hideRecognizeObj);
+
+    ui->imageScene->setParent(ui->widget_imageScene);
 
 }
 
@@ -137,6 +140,18 @@ void CMainWindow::onDataUpload()
         } else {
             qDebug() << "Failed to save image";
         }
+    });
+
+  // TODO
+    QMap<QString, QVector<QString>> vector;
+
+    vector.insert("Object 1", {"size: 1", "gerg: 2"});
+
+    vector.insert("Object 2", {"size: 14", "gerg: 23"});
+
+    ui->widget_objects->showRecognizeObj(vector);
+  // TODO
+
     } else {
         qDebug() << "Error in data uploading" << reply->errorString();
     }
@@ -152,7 +167,7 @@ void CMainWindow::on_btn_calc_clicked()
 
 void CMainWindow::setScene(QString filepath)
 {
-    QImage* img = new QImage(filepath);
+    QImage img(filepath);
 
     ui->imageScene->setScene(img);
 }
