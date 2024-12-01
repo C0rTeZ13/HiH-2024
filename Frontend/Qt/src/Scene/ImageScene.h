@@ -14,9 +14,14 @@ public:
 
     void setScene(const QImage& img);
 
+    // QWidget interface
+protected:
+    void resizeEvent(QResizeEvent *event);
+
 private:
-    QImage m_scene;
     QLabel* m_scceneLabel;
+
+    QPixmap pixmap;
 
 };
 

@@ -24,6 +24,9 @@ CMainWindow::CMainWindow(QWidget *parent)
     //setWindowFlags(windowFlags() | Qt::WindowMinimizeButtonHint);
 
     connect(ui->params, &CParametrs::sig_imageChanged, this, &CMainWindow::setScene);
+    connect(ui->params, &CParametrs::sig_imageChanged, ui->widget_objects, &CRecognizeObjects::hideRecognizeObj);
+
+    ui->imageScene->setParent(ui->widget_imageScene);
 
 }
 
@@ -81,6 +84,16 @@ void CMainWindow::on_btn_calc_clicked()
             qDebug() << "Ошибка: " << reply->errorString();
         }
     });
+
+
+    QMap<QString, QVector<QString>> vector;
+
+    vector.insert("Object 1", {"size: 1", "gerg: 2"});
+
+    vector.insert("Object 2", {"size: 14", "gerg: 23"});
+
+    ui->widget_objects->showRecognizeObj(vector);
+
 }
 
 void CMainWindow::setScene(QString filepath)

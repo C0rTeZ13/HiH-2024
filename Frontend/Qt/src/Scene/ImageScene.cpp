@@ -10,23 +10,40 @@ CImageScene::CImageScene(QWidget *parent)
     this->setLayout(new QVBoxLayout());
 
     m_scceneLabel = new QLabel(this);
-    QPixmap pixmap = QPixmap(":/resources/no_Image.jpg");
+    QPixmap pixmap = QPixmap(":/resources/no_Image.jpg"); //sticker.gif
 
     if(pixmap.isNull())return;
-    pixmap = pixmap.scaled(this->size(), Qt::KeepAspectRatioByExpanding);
+    pixmap = pixmap.scaled(parent->size(), Qt::KeepAspectRatioByExpanding);
 
+
+    m_scceneLabel->setScaledContents(true);
     m_scceneLabel->setPixmap(pixmap);
     this->layout()->addWidget(m_scceneLabel);
 }
 
 void CImageScene::setScene(const QImage &img)
 {
-    m_scene = img;
+    QImage scene(":/resources/no_Image.jpg");
 
-    QPixmap pixmap = QPixmap::fromImage(img);
+    if (!img.isNull())
+    {
+        scene = img;
+    }
 
-    if(pixmap.isNull())return;
-    pixmap = pixmap.scaled(this->size(), Qt::KeepAspectRatioByExpanding);
+    pixmap = QPixmap::fromImage(scene);
+
+    if (pixmap.isNull())
+    {
+        return;
+    }
+
+    //this->setMaximumSize(scene.size());
+    pixmap = pixmap.scaled(this->size(), Qt::KeepAspectRatio);
 
     m_scceneLabel->setPixmap(pixmap);
+}
+
+void CImageScene::resizeEvent(QResizeEvent *event)
+{
+    QWidget::resizeEvent(event);
 }
