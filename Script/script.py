@@ -118,7 +118,7 @@ def main():
 
             # Записываем данные
             for class_id, size_mm in result.items():
-                writer.writerow([class_id, size_mm])
+                writer.writerow([class_id, round(size_mm)])
 
 
 if __name__ == "__main__":
