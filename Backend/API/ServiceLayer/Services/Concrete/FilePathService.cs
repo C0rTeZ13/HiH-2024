@@ -21,7 +21,7 @@ namespace ServiceLayer.Services.Concrete
 
         public string CreateOutFilePath(string fileName)
         {
-            return Path.Combine(_outFilesDir, Path.ChangeExtension(Path.GetRandomFileName(), Path.GetExtension(fileName)));
+            return Path.Combine(_outFilesDir, Path.ChangeExtension(DateTime.Now.ToString(_dateFormat), Path.GetExtension(fileName)));
         }
     }
 }
