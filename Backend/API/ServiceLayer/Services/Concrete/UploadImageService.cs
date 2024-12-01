@@ -14,6 +14,13 @@ namespace ServiceLayer.Services.Concrete
             _dbContext = dbContext;
         }
 
+        public Stream? GetFileStream(int estimatesId)
+        {
+            string? path = _dbContext.Estimates.FirstOrDefault(e => e.EstimatesID == estimatesId)?.ResultFilePath;
+            if(path is null) return null;
+            return File.OpenRead(path);
+        }
+
         public string? GetPathById(int fileId)
         {
             UploadedImage? image = _dbContext.Images.FirstOrDefault(i => i.UploadedImageId == fileId);

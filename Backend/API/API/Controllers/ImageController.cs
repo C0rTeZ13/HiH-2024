@@ -1,4 +1,5 @@
-﻿using API.Models;
+﻿using System.Net.Http.Headers;
+using API.Models;
 using DataLayer.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -43,6 +44,13 @@ namespace API.Controllers
         public IEnumerable<UploadedImageDto> UserImages()
         {
             return _uploadImageService.GetUserImages(_userClaimsService.GetUserId(User));
+        }
+
+
+        [HttpGet]
+        public IActionResult ResultImage(int estimatesId)
+        {
+            return new FileStreamResult(_uploadImageService.GetFileStream(estimatesId), "image/jpeg");
         }
     }
 }
