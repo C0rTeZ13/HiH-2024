@@ -119,6 +119,7 @@ void CMainWindow::onImageUpload()
         qDebug() << "Error in uploading image to the server:" << reply->errorString();
     }
 
+
     reply->deleteLater();
 }
 
@@ -155,18 +156,6 @@ void CMainWindow::onDataUpload()
         } else {
             qDebug() << "Failed to save image";
         }
-    });
-
-  // TODO
-    QMap<QString, QVector<QString>> vector;
-
-    vector.insert("Object 1", {"size: 1", "gerg: 2"});
-
-    vector.insert("Object 2", {"size: 14", "gerg: 23"});
-
-    ui->widget_objects->showRecognizeObj(vector);
-  // TODO
-
     } else {
         qDebug() << "Error in data uploading" << reply->errorString();
     }
