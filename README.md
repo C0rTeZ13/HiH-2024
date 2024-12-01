@@ -11,7 +11,8 @@
 * [Обзор архитектурного решения](/_doc/architecture_guide.md)
 * [Руководство по настройке и использованию](/_doc/setup_guide.md)
 * [Алгоритм обнаружения и рассчета площадей деталей](/_doc/algorithm_guide.md)
-* [Руководство для программистов](/_doc/programming_guide.md)
+
+Ссылка на спецификацию API - [swagger](http://v2684079.hosted-by-vdsina.ru:5086/swagger/index.html)
 
 Ссылка на диск с файлами, которые не были добавлены в git-репозиторий - 
 [Яндекс.Диск](https://disk.yandex.ru/d/WxdX_FwFQdTang):
@@ -24,7 +25,6 @@
     ./_doc/ -- здесь хранится документация и другие материалы
         ./algorithm_guide.md
         ./architecture_guide.md
-        ./programming_guide.md
         ./setup_guide.md
     ./_image/ -- папка для хранения изображений документации (там есть steamhappy)
     
