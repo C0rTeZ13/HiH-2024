@@ -47,8 +47,14 @@ void CParametrs::save()
 {
     QString str = QFileDialog::getSaveFileName(this, tr("Save File As"), "", tr("Files (*.json)"));
 
+    if (str.isEmpty())
+    {
+        return;
+    }
+
     QVariantMap map;
 
+    map.insert("fileName", m_fileName);
     map.insert("standardSizeMillimeters", m_params.m_standardSizeMillimeters);
     map.insert("standardDetail", m_params.standardDetail);
     map.insert("torchWidthMillimeters", m_params.m_torchWidthMillimeters);
@@ -69,6 +75,11 @@ void CParametrs::save()
 void CParametrs::load()
 {
     QString str = QFileDialog::getOpenFileName(nullptr, tr("Load File"), "", tr("Files (*.json)"));
+
+    if (str.isEmpty())
+    {
+        return;
+    }
 
     QFile jsonFile(str);
     jsonFile.open(QFile::ReadOnly);
@@ -106,6 +117,11 @@ void CParametrs::on_text_imageFile_textChanged(const QString &arg1)
 void CParametrs::on_icon_imageFile_clicked()
 {
     QString str = QFileDialog::getOpenFileName(nullptr, tr("Load Image"), m_fileName, tr("Imsges (*.png *.jpg)"));
+
+    if (str.isEmpty())
+    {
+        return;
+    }
 
     ui->text_imageFile->setText(str);
 }
