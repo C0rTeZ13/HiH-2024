@@ -12,7 +12,7 @@ CAuthorization::CAuthorization(QWidget *parent) :
     ui(new Ui::CAuthorization)
 {
     ui->setupUi(this);
-    _url = QString("http://94.103.84.36:5086/");
+    _url = QString("http://89.110.93.9:5086/");
 }
 
 CAuthorization::~CAuthorization()
