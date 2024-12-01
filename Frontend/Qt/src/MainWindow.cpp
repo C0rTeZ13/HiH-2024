@@ -39,28 +39,32 @@ CMainWindow::~CMainWindow()
 
 void CMainWindow::sendImageToServer(const QImage &image)
 {
-    // Сохранение изображения в байтовый массив
     QByteArray byteArray;
     QBuffer buffer(&byteArray);
     buffer.open(QIODevice::WriteOnly);
-    image.save(&buffer, "JPG"); // Сохраняем изображение в формате JPG
+    image.save(&buffer, "JPG");
     buffer.close();
 
-    // Создание multipart-запроса
     QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
 
     // Создание части запроса для файла
     QHttpPart filePart;
-    QString filename = "filename=" + QFileInfo(ui->params->getImage()).fileName();
+    QString filename = "filename=\"" + QFileInfo(ui->params->getImage()).fileName() + "\"";
     filePart.setHeader(QNetworkRequest::ContentDispositionHeader,
                        QVariant("form-data; name=\"file\"; " + filename));
-    filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("image/jpeg"));
+    filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("image/jpg"));
+
+//    QFile imageFile("testRecievedImage1.jpg"); // Тут захардкодил куда сейвится изображение
+//    imageFile.open(QIODevice::WriteOnly);
+//    imageFile.write(byteArray);
+//    imageFile.close();
+//    qDebug() << "test Image recieved and saved";
+
     filePart.setBody(byteArray.toBase64());
     multiPart->append(filePart);
 
     QUrl url(_url + "Image/UploadImage");
     QNetworkRequest request(url);
-    QByteArray encodedCredentials = (_login + ":" + _password).toUtf8().toBase64();
     QString authHeader = "Bearer " + _token;
     request.setRawHeader("Authorization", authHeader.toUtf8());
 
@@ -78,7 +82,6 @@ void CMainWindow::sendDataToServer(QJsonObject json)
     QNetworkAccessManager *manager = new QNetworkAccessManager();
     QUrl lUrl(_url + "DrawEstimates/CreateEstimates");
     QNetworkRequest request(lUrl);
-    QByteArray encodedCredentials = (_login + ":" + _password).toUtf8().toBase64();
     QString authHeader = "Bearer " + _token;
     request.setRawHeader(QByteArray("Authorization"), QByteArray(authHeader.toUtf8()));
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -95,6 +98,7 @@ void CMainWindow::onImageUpload()
     if (reply->error() == QNetworkReply::NoError) {
         StructParams params = *ui->params->getParams();
         int idImage = QJsonDocument::fromJson(reply->readAll())["id"].toInt();
+        qDebug() << idImage;
         int standartSizeMillimeters = params.m_standardSizeMillimeters;
         QString standardDetail = params.standardDetail;
         int torchWidth = params.m_torchWidthMillimeters;
@@ -122,17 +126,28 @@ void CMainWindow::onDataUpload()
 {
     QNetworkReply *reply = qobject_cast<QNetworkReply *>(sender());
     if(reply->error() == QNetworkReply::NoError) {
-        QByteArray responsedData = reply->readAll();
-        QJsonDocument jsonDoc = QJsonDocument::fromJson(responsedData);
+        QJsonDocument jsonDoc = QJsonDocument::fromJson(reply->readAll());
         if (!jsonDoc.isObject()) {
-            qDebug() << "Invalid JSON respons";
+            qDebug() << "Invalid JSON response";
             return;
         }
-        QJsonObject responseObject = jsonDoc.object();
-        QString image = responseObject["imageFile"].toString();
-        qDebug() << "Image data: " << image;
+        QString image = jsonDoc["imageFile"].toString();
+        QJsonArray detailsEstimates = jsonDoc["detailsEstimates"].toArray(); // Массив рассчитанных площадей элементов
+        /*
+        for (const /QJsonValue &value : detailsEstimates) {
+            QJsonObject estimate = value.toObject();
+
+            int id = estimate["id"].toInt();
+            int squareMm = estimate["squareMillimeters"].toInt();
+            int paintRateMl = estimate["paintRateMilliliters"].toInt();
+            int coast = extimate["coast"].toInt();
+            // Все поля, на данный момент получаемые от сервера
+        }
+        */        
         QByteArray imageData = QByteArray::fromBase64(image.toUtf8());
-        QFile imageFile("testRecievedImage.jpg");
+        QImage terecievedImage;
+        terecievedImage.loadFromData(imageData);
+        QFile imageFile("testRecievedImage.jpg"); // Тут захардкодил куда сейвится изображение
         if (imageFile.open(QIODevice::WriteOnly)) {
             imageFile.write(imageData);
             imageFile.close();
