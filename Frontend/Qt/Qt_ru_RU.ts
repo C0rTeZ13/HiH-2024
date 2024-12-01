@@ -72,7 +72,7 @@
     <message>
         <location filename="ui/Parametrs.ui" line="314"/>
         <source>Paint Mm per square Meter</source>
-        <translation>Цена краски на 1 кв. мм</translation>
+        <translation>Цена за литр краски</translation>
     </message>
     <message>
         <location filename="ui/Parametrs.ui" line="362"/>
