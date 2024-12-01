@@ -23,7 +23,7 @@ namespace API
         public static void AddAppServices(this IServiceCollection services)
         {
             services.AddScoped<ICreateEstimatesService, CreateEstimatesService>();
-            services.AddScoped<IDetailsPaintingAreaService, TestDetailsPaintingAreaService>();
+            services.AddScoped<IDetailsPaintingAreaService, DetailsPaintingAreaService>();
             services.AddScoped<IFilePathService, FilePathService>();
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IEstimatesStorageService, EstimatesStorageService>();
