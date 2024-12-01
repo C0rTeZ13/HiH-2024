@@ -54,12 +54,6 @@ void CMainWindow::sendImageToServer(const QImage &image)
                        QVariant("form-data; name=\"file\"; " + filename));
     filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("image/jpg"));
 
-//    QFile imageFile("testRecievedImage1.jpg"); // Тут захардкодил куда сейвится изображение
-//    imageFile.open(QIODevice::WriteOnly);
-//    imageFile.write(byteArray);
-//    imageFile.close();
-//    qDebug() << "test Image recieved and saved";
-
     filePart.setBody(byteArray.toBase64());
     multiPart->append(filePart);
 
@@ -134,20 +128,47 @@ void CMainWindow::onDataUpload()
         }
         QString image = jsonDoc["imageFile"].toString();
         QJsonArray detailsEstimates = jsonDoc["detailsEstimates"].toArray(); // Массив рассчитанных площадей элементов
-        /*
-        for (const /QJsonValue &value : detailsEstimates) {
+
+        //QMap<QString,QVector<QString>>
+
+        QMap<int,QString> mapDetails =
+        {
+            {EParts::back_bumper, "Back Bumper"},
+            {EParts::back_door, "Back Door"},
+            {EParts::back_wing, "Back Wing"},
+            {EParts::bonnet, "Bonnet"},
+            {EParts::front_bumper, "Front Bumper"},
+            {EParts::front_door, "Front Door"},
+            {EParts::front_wing, "Front Wing"},
+            {EParts::roof, "roof"},
+        };
+
+        QMap<QString,QVector<QString>> recObjs;
+
+        for (const QJsonValue &value : detailsEstimates) {
             QJsonObject estimate = value.toObject();
 
             int id = estimate["id"].toInt();
             int squareMm = estimate["squareMillimeters"].toInt();
             int paintRateMl = estimate["paintRateMilliliters"].toInt();
-            int coast = extimate["coast"].toInt();
+            int coast = estimate["coast"].toInt();
             // Все поля, на данный момент получаемые от сервера
+
+            recObjs.insert(mapDetails[id],  {
+                                            "squareMm:    " + QString::number(squareMm),
+                                            "paintRateMl: " + QString::number(paintRateMl),
+                                            "cost:       " + QString::number(coast)
+                                            });
         }
-        */        
+
+        ui->widget_objects->showRecognizeObj(recObjs);
+
         QByteArray imageData = QByteArray::fromBase64(image.toUtf8());
         QImage terecievedImage;
         terecievedImage.loadFromData(imageData);
+
+        ui->imageScene->setScene(terecievedImage);
+
         QFile imageFile("testRecievedImage.jpg"); // Тут захардкодил куда сейвится изображение
         if (imageFile.open(QIODevice::WriteOnly)) {
             imageFile.write(imageData);

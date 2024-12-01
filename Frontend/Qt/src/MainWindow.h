@@ -9,6 +9,19 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class CMainWindow; }
 QT_END_NAMESPACE
 
+enum EParts
+{
+    back_bumper,
+    back_door,
+    back_wing,
+    bonnet,
+    front_bumper,
+    front_door,
+    front_wing,
+    roof,
+};
+
+
 class CMainWindow : public QMainWindow
 {
     Q_OBJECT

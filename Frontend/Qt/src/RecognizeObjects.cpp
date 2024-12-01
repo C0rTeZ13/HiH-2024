@@ -38,9 +38,9 @@ void CRecognizeObjects::showRecognizeObj(QMap<QString, QVector<QString> > recObj
     view->setModel(model);
 
     view->setMinimumHeight(ui->widget_objTree->size().height());
-    view->setStyleSheet("QTreeView { font-size: 27px; show-decoration-selected: 0; } QTreeView::branch:has-siblings:!adjoins-item { border-image: none; } QTreeView::branch:has-siblings:adjoins-item { border-image: none; } QTreeView::branch:!has-children:!has-siblings:adjoins-item { border-image: none;} QTreeView::branch:has-children:!has-siblings:closed, QTreeView::branch:closed:has-children:has-siblings { border-image: none; image: url(':images/images/right_arrow.png'); } QTreeView::branch:open:has-children:!has-siblings, QTreeView::branch:open:has-children:has-siblings  { border-image: none; image: url(':images/images/down_arrow.png'); } ");
+    //view->setStyleSheet("QTreeView { font-size: 27px; show-decoration-selected: 0; } QTreeView::branch:has-siblings:!adjoins-item { border-image: none; } QTreeView::branch:has-siblings:adjoins-item { border-image: none; } QTreeView::branch:!has-children:!has-siblings:adjoins-item { border-image: none;} QTreeView::branch:has-children:!has-siblings:closed, QTreeView::branch:closed:has-children:has-siblings { border-image: none; image: url(':images/images/right_arrow.png'); } QTreeView::branch:open:has-children:!has-siblings, QTreeView::branch:open:has-children:has-siblings  { border-image: none; image: url(':images/images/down_arrow.png'); } ");
 
-    ui->widget_objTree->setMinimumSize(QSize(280, 150));
+    ui->widget_objTree->setMinimumSize(QSize(300, 150));
     ui->widget_objTree->show();
 }
 

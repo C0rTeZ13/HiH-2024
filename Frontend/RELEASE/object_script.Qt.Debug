@@ -1,0 +1,13 @@
+debug/main.o
+debug/Authorization.o
+debug/MainWindow.o
+debug/Parametrs.o
+debug/RecognizeObjects.o
+debug/ImageScene.o
+debug/qrc_Resource.o
+debug/qrc_qmake_qmake_qm_files.o
+debug/moc_Authorization.o
+debug/moc_MainWindow.o
+debug/moc_Parametrs.o
+debug/moc_RecognizeObjects.o
+debug/moc_ImageScene.o
