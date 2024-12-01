@@ -2,6 +2,9 @@
 #define CIMAGESCENE_H
 
 #include <QWidget>
+#include <QImage>
+
+#include <QLabel>
 
 class CImageScene : public QWidget
 {
@@ -9,7 +12,16 @@ class CImageScene : public QWidget
 public:
     explicit CImageScene(QWidget *parent = nullptr);
 
-signals:
+    void setScene(const QImage& img);
+
+    // QWidget interface
+protected:
+    void resizeEvent(QResizeEvent *event);
+
+private:
+    QLabel* m_scceneLabel;
+
+    QPixmap pixmap;
 
 };
 

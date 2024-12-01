@@ -1,8 +1,10 @@
-#include "MainWindow.h"
+#include "Authorization.h"
 
 #include <QApplication>
 #include <QLocale>
 #include <QTranslator>
+
+void startMain();
 
 int main(int argc, char *argv[])
 {
@@ -17,7 +19,9 @@ int main(int argc, char *argv[])
             break;
         }
     }
-    CMainWindow w;
-    w.show();
+
+    CAuthorization authorization;
+    authorization.show();
+
     return a.exec();
 }
