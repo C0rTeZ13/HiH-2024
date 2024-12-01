@@ -111,7 +111,7 @@ def main():
 
     if output_path:
         # Сохранение словаря размеров в CSV файл
-        output_file = os.path.join(output_dir, "object_sizes.csv")
+        output_file = os.path.join(output_dir, os.path.splitext(os.path.basename(file_path))[0] + "_sizes.csv")
         with open(output_file, mode='w', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
             writer.writerow(["Class ID", "Size (mm²)"])  # Заголовки столбцов
