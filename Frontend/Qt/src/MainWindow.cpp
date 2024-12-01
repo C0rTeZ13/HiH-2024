@@ -85,7 +85,7 @@ void CMainWindow::on_btn_calc_clicked()
 
 void CMainWindow::setScene(QString filepath)
 {
-    QImage* img = new QImage(filepath);
+    QImage img(filepath);
 
     ui->imageScene->setScene(img);
 }

@@ -19,11 +19,8 @@ public:
 
 private slots:
     void on_btn_calc_clicked();
-
     void setScene(QString filepath);
-
     void on_btn_save_clicked();
-
     void on_btn_load_clicked();
 
 private:

@@ -4,16 +4,19 @@
 #include <QWidget>
 #include <QImage>
 
+#include <QLabel>
+
 class CImageScene : public QWidget
 {
     Q_OBJECT
 public:
     explicit CImageScene(QWidget *parent = nullptr);
 
-    void setScene(QImage* img);
+    void setScene(const QImage& img);
 
 private:
-    QImage* scene;
+    QImage m_scene;
+    QLabel* m_scceneLabel;
 
 };
 
