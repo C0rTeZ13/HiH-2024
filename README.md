@@ -20,7 +20,7 @@
         ./architecture_guide.md
         ./programming_guide.md
         ./setup_guide.md
-    ./_image/ -- папка для хранения изображений 
+    ./_image/ -- папка для хранения изображений документации (там есть steamhappy)
     
     ./Frontend/ -- клиентская часть
         ./Qt/ - проект Qt5 (C++)
