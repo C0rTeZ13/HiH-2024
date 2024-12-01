@@ -2,5 +2,7 @@
     <qresource prefix="/">
         <file>resources/folder.png</file>
         <file>resources/folder_invert.png</file>
+        <file>resources/no_Image.jpg</file>
+        <file>resources/sticker.gif</file>
     </qresource>
 </RCC>
