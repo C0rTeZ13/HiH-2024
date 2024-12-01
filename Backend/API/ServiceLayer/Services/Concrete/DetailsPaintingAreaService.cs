@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.VisualBasic.FileIO;
 using ServiceLayer.Models;
 using System.Diagnostics;
 
@@ -18,6 +19,7 @@ namespace ServiceLayer.Services.Concrete
         // здесь будет обращение к скрипту
         public IEnumerable<DetailPaintingArea> GetDetailPaintingAreas(DrawEstimatesInDto inDto, string outFilePath)
         {
+            string outDir = Path.GetDirectoryName(outFilePath);
             int typeIndex = inDto.StandardDetail switch
             {
                 StandardDetail.FrontDoor => 5,
@@ -28,7 +30,7 @@ namespace ServiceLayer.Services.Concrete
             string arg1 = inDto.ImageFilePath;
             string arg2 = typeIndex.ToString();
             string arg3 = inDto.StandardSizeMillimeters.ToString();
-            string arg4 = Path.GetDirectoryName(outFilePath);
+            string arg4 = outDir;
 
             // Формируем аргументы
             string arguments = $"\"{_scriptPath}\" \"{arg1}\" {arg2} {arg3} \"{arg4}\"";
@@ -69,13 +71,30 @@ namespace ServiceLayer.Services.Concrete
                 Console.WriteLine($"An error occurred: {ex.Message}");
             }
 
+            string filename = Path.GetFileNameWithoutExtension(inDto.ImageFilePath);
+            string imagePath = Path.Combine(outDir, $"{filename}_segmented.jpg");
+            string sizesPath = Path.Combine(outDir, $"{filename}_sizes.csv");
+            File.Move(Path.Combine(Path.GetDirectoryName(outFilePath), imagePath), outFilePath);
 
-            Random rand = new Random();
-            return Enumerable.Range(0, 5).Select(x => new DetailPaintingArea()
+            List<DetailPaintingArea> details = new List<DetailPaintingArea>();
+            using (TextFieldParser parser = new TextFieldParser(sizesPath))
             {
-                Id = x,
-                SquareMillimeters = (uint)rand.Next(1_000_000, 10_000_000)
-            });
+                parser.TextFieldType = FieldType.Delimited;
+                parser.SetDelimiters(",");
+                string[] header = parser.ReadFields();
+                while (!parser.EndOfData)
+                {
+                    //Processing row
+                    string[] fields = parser.ReadFields();
+                    details.Add(new DetailPaintingArea()
+                    {
+                        Id = int.Parse(fields[0]),
+                        SquareMillimeters = uint.Parse(fields[1]),
+                    });
+                }
+            }
+
+            return details;
         }
     }
 }
