@@ -127,9 +127,21 @@ void CMainWindow::onDataUpload()
         }
         QJsonObject responseObject = jsonDoc.object();
         QString image = responseObject["imageFile"].toString();
-        qDebug() << "Image data: " << image;
+        QJsonArray detailsEstimates = responseObject["detailsEstimates"].toArray(); // Массив рассчитанных площадей элементов
+        /*
+        for (const /QJsonValue &value : detailsEstimates) {
+            QJsonObject estimate = value.toObject();
+
+            int id = estimate["id"].toInt();
+            int squareMm = estimate["squareMillimeters"].toInt();
+            int paintRateMl = estimate["paintRateMilliliters"].toInt();
+            int coast = extimate["coast"].toInt();
+            // Все поля, на данный момент получаемые от сервера
+        }
+        */
+
         QByteArray imageData = QByteArray::fromBase64(image.toUtf8());
-        QFile imageFile("testRecievedImage.jpg");
+        QFile imageFile("testRecievedImage.jpg"); // Тут захардкодил куда сейвится изображение
         if (imageFile.open(QIODevice::WriteOnly)) {
             imageFile.write(imageData);
             imageFile.close();
@@ -137,6 +149,7 @@ void CMainWindow::onDataUpload()
         } else {
             qDebug() << "Failed to save image";
         }
+
     } else {
         qDebug() << "Error in data uploading" << reply->errorString();
     }
