@@ -22,11 +22,13 @@ private slots:
 
 private:
     void startMain();
-
+    void authorize();
+    void authorizeResponse();
 private:
     // Params
     QString m_login;
     QString m_password;
+    QString _url;
 
     //
     CMainWindow w;
